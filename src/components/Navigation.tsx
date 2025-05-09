@@ -26,7 +26,7 @@ const Navigation = () => {
           <NavLink href="#videos" text="Videos" />
           <NavLink href="#books" text="Books" />
           <NavLink href="#blog" text="Blog" />
-          <NavLink href="#members" text="Members" />
+          <NavLink to="/members" text="Members" />
           <NavLink href="#about" text="About Us" />
           <Button className="btn-primary">Contact Us</Button>
         </div>
@@ -51,7 +51,7 @@ const Navigation = () => {
             <MobileNavLink href="#videos" text="Videos" icon={<Video size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#books" text="Books" icon={<Book size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#blog" text="Blog" icon={<BookOpen size={20} />} onClick={() => setIsOpen(false)} />
-            <MobileNavLink href="#members" text="Members" icon={<Lock size={20} />} onClick={() => setIsOpen(false)} />
+            <MobileNavLink to="/members" text="Members" icon={<Lock size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#about" text="About Us" icon={<User size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#contact" text="Contact Us" icon={<Mail size={20} />} onClick={() => setIsOpen(false)} />
           </div>
@@ -62,35 +62,65 @@ const Navigation = () => {
 };
 
 interface NavLinkProps {
-  href: string;
+  href?: string;
+  to?: string;
   text: string;
 }
 
-const NavLink = ({ href, text }: NavLinkProps) => (
-  <a 
-    href={href} 
-    className="text-foreground hover:text-missionpurple-500 transition-colors font-medium"
-  >
-    {text}
-  </a>
-);
+const NavLink = ({ href, to, text }: NavLinkProps) => {
+  if (to) {
+    return (
+      <Link 
+        to={to} 
+        className="text-foreground hover:text-missionpurple-500 transition-colors font-medium"
+      >
+        {text}
+      </Link>
+    );
+  }
+  
+  return (
+    <a 
+      href={href} 
+      className="text-foreground hover:text-missionpurple-500 transition-colors font-medium"
+    >
+      {text}
+    </a>
+  );
+};
 
 interface MobileNavLinkProps {
-  href: string;
+  href?: string;
+  to?: string;
   text: string;
   icon: React.ReactNode;
   onClick: () => void;
 }
 
-const MobileNavLink = ({ href, text, icon, onClick }: MobileNavLinkProps) => (
-  <a 
-    href={href} 
-    className="flex items-center justify-center space-x-2 py-2 hover:text-missionpurple-500 transition-colors"
-    onClick={onClick}
-  >
-    {icon}
-    <span>{text}</span>
-  </a>
-);
+const MobileNavLink = ({ href, to, text, icon, onClick }: MobileNavLinkProps) => {
+  if (to) {
+    return (
+      <Link 
+        to={to} 
+        className="flex items-center justify-center space-x-2 py-2 hover:text-missionpurple-500 transition-colors"
+        onClick={onClick}
+      >
+        {icon}
+        <span>{text}</span>
+      </Link>
+    );
+  }
+  
+  return (
+    <a 
+      href={href} 
+      className="flex items-center justify-center space-x-2 py-2 hover:text-missionpurple-500 transition-colors"
+      onClick={onClick}
+    >
+      {icon}
+      <span>{text}</span>
+    </a>
+  );
+};
 
 export default Navigation;

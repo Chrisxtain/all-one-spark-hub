@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Lock, User } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 const MembersSection = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,28 +67,9 @@ const MembersSection = () => {
                 ))}
               </ul>
               
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button className="w-full mt-8 btn-primary">Join Now</Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Welcome to Mission All One</SheetTitle>
-                    <SheetDescription>
-                      Sign up to join our members community and gain access to exclusive content.
-                    </SheetDescription>
-                  </SheetHeader>
-                  <div className="grid gap-4 py-4">
-                    <p className="text-center text-muted-foreground">
-                      Membership signup form will be integrated here
-                    </p>
-                    <div className="flex items-center justify-center h-32">
-                      <User size={64} className="text-missionpurple-300" />
-                    </div>
-                  </div>
-                  <Button className="w-full">Coming Soon</Button>
-                </SheetContent>
-              </Sheet>
+              <Link to="/members">
+                <Button className="w-full mt-8 btn-primary">Join Now</Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
@@ -125,10 +107,12 @@ const MembersSection = () => {
               <CollapsibleContent className="p-4 bg-slate-50 border-t">
                 <p>{item.description}</p>
                 <div className="flex justify-end mt-3">
-                  <Button variant="outline" size="sm" className="flex gap-2 items-center">
-                    <Lock size={14} />
-                    <span>Members Only</span>
-                  </Button>
+                  <Link to="/members">
+                    <Button variant="outline" size="sm" className="flex gap-2 items-center">
+                      <Lock size={14} />
+                      <span>Members Only</span>
+                    </Button>
+                  </Link>
                 </div>
               </CollapsibleContent>
             </Collapsible>
