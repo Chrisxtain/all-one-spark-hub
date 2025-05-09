@@ -3,28 +3,41 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Play } from "lucide-react";
 
-const VideosSection = () => {
-  const videos = [
-    {
-      title: "Finding Your Inner Light",
-      duration: "4:15",
-      thumbnail: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?auto=format&fit=crop&w=800&q=80",
-      description: "A gentle introduction to connecting with your inner wisdom and light."
-    },
-    {
-      title: "The Power of Mindfulness",
-      duration: "3:45",
-      thumbnail: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-      description: "Learn simple mindfulness techniques adapted for children and families."
-    },
-    {
-      title: "Creative Expression Journey",
-      duration: "5:20",
-      thumbnail: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-      description: "Explore how creativity can be a pathway to spiritual growth and self-discovery."
-    },
-  ];
+// Move videos data to a separate array that can be easily updated
+const videos = [
+  {
+    id: 1,
+    title: "Finding Your Inner Light",
+    duration: "4:15",
+    thumbnail: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?auto=format&fit=crop&w=800&q=80",
+    description: "A gentle introduction to connecting with your inner wisdom and light."
+  },
+  {
+    id: 2,
+    title: "The Power of Mindfulness",
+    duration: "3:45",
+    thumbnail: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
+    description: "Learn simple mindfulness techniques adapted for children and families."
+  },
+  {
+    id: 3,
+    title: "Creative Expression Journey",
+    duration: "5:20",
+    thumbnail: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    description: "Explore how creativity can be a pathway to spiritual growth and self-discovery."
+  },
+  {
+    id: 4,
+    title: "Meditation for Beginners",
+    duration: "6:10",
+    thumbnail: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f?auto=format&fit=crop&w=800&q=80",
+    description: "An introduction to meditation practices suitable for children and families."
+  },
+];
 
+// To update videos, simply modify the array above by adding, removing, or editing entries
+
+const VideosSection = () => {
   return (
     <section id="videos" className="section-container">
       <h2 className="section-title">Animated <span className="gradient-text">Videos</span></h2>
@@ -33,8 +46,8 @@ const VideosSection = () => {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-        {videos.map((video, index) => (
-          <Card key={index} className="card-hover overflow-hidden">
+        {videos.map((video) => (
+          <Card key={video.id} className="card-hover overflow-hidden">
             <div className="relative h-48 overflow-hidden">
               <img 
                 src={video.thumbnail} 

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Book, BookOpen, Video, Search, Mail, User } from "lucide-react";
+import { Menu, X, Book, BookOpen, Video, Search, Mail, User, Lock } from "lucide-react";
 import { Link } from 'react-router-dom';
 
 const Navigation = () => {
@@ -26,6 +26,7 @@ const Navigation = () => {
           <NavLink href="#videos" text="Videos" />
           <NavLink href="#books" text="Books" />
           <NavLink href="#blog" text="Blog" />
+          <NavLink href="#members" text="Members" />
           <NavLink href="#about" text="About Us" />
           <Button className="btn-primary">Contact Us</Button>
         </div>
@@ -50,6 +51,7 @@ const Navigation = () => {
             <MobileNavLink href="#videos" text="Videos" icon={<Video size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#books" text="Books" icon={<Book size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#blog" text="Blog" icon={<BookOpen size={20} />} onClick={() => setIsOpen(false)} />
+            <MobileNavLink href="#members" text="Members" icon={<Lock size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#about" text="About Us" icon={<User size={20} />} onClick={() => setIsOpen(false)} />
             <MobileNavLink href="#contact" text="Contact Us" icon={<Mail size={20} />} onClick={() => setIsOpen(false)} />
           </div>
