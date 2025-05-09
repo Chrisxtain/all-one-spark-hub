@@ -10,22 +10,36 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
-// Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase client safely
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+// Create client only if both URL and key are available
+let supabase = null;
+try {
+  if (supabaseUrl && supabaseAnonKey) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  }
+} catch (error) {
+  console.error("Error initializing Supabase client:", error);
+}
 
 const Members = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [supabaseError, setSupabaseError] = useState(!supabase);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   // Check if user is already logged in
   useEffect(() => {
+    if (!supabase) return;
+    
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session?.user) {
@@ -44,12 +58,23 @@ const Members = () => {
     
     getCurrentUser();
     return () => {
-      authListener.subscription.unsubscribe();
+      if (authListener?.subscription) {
+        authListener.subscription.unsubscribe();
+      }
     };
   }, []);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    if (!supabase) {
+      toast({
+        title: "Configuration Error",
+        description: "Authentication is not available. Please contact the administrator.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
     
     try {
@@ -77,6 +102,15 @@ const Members = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    if (!supabase) {
+      toast({
+        title: "Configuration Error",
+        description: "Authentication is not available. Please contact the administrator.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
     
     try {
@@ -103,6 +137,8 @@ const Members = () => {
   };
 
   const handleSignOut = async () => {
+    if (!supabase) return;
+    
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
@@ -129,7 +165,18 @@ const Members = () => {
           Members <span className="gradient-text">Community</span>
         </h1>
         
-        {!user ? (
+        {supabaseError && (
+          <Alert variant="destructive" className="mb-8 max-w-md mx-auto">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Authentication Error</AlertTitle>
+            <AlertDescription>
+              Supabase environment variables are not properly configured. 
+              Please make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment.
+            </AlertDescription>
+          </Alert>
+        )}
+        
+        {!supabaseError && !user ? (
           <div className="max-w-md mx-auto">
             <Card className="p-6">
               <Tabs defaultValue="signin" className="w-full">
@@ -203,7 +250,7 @@ const Members = () => {
               </Tabs>
             </Card>
           </div>
-        ) : (
+        ) : !supabaseError && user ? (
           <div className="max-w-4xl mx-auto">
             <Card className="p-6">
               <div className="text-center mb-6">
@@ -232,7 +279,7 @@ const Members = () => {
               </div>
             </Card>
           </div>
-        )}
+        ) : null}
       </main>
       
       <Footer />
