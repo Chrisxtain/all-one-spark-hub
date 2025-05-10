@@ -4,12 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import AuthError from '@/components/auth/AuthError';
 import AuthForms from '@/components/auth/AuthForms';
 import MemberContent from '@/components/members/MemberContent';
 import { 
-  getSupabaseClient, 
-  isSupabaseConfigured,
   signUp,
   signIn,
   signOut,
@@ -22,14 +19,11 @@ const Members = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
-  const [supabaseError, setSupabaseError] = useState(!isSupabaseConfigured());
   const { toast } = useToast();
   const navigate = useNavigate();
 
   // Check if user is already logged in
   useEffect(() => {
-    if (!isSupabaseConfigured()) return;
-    
     const { data: authListener } = onAuthStateChange(
       (event, session) => {
         if (session?.user) {
@@ -56,14 +50,6 @@ const Members = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!isSupabaseConfigured()) {
-      toast({
-        title: "Configuration Error",
-        description: "Authentication is not available. Please contact the administrator.",
-        variant: "destructive",
-      });
-      return;
-    }
     
     setLoading(true);
     
@@ -89,14 +75,6 @@ const Members = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    if (!isSupabaseConfigured()) {
-      toast({
-        title: "Configuration Error",
-        description: "Authentication is not available. Please contact the administrator.",
-        variant: "destructive",
-      });
-      return;
-    }
     
     setLoading(true);
     
@@ -121,8 +99,6 @@ const Members = () => {
   };
 
   const handleSignOut = async () => {
-    if (!isSupabaseConfigured()) return;
-    
     try {
       const { error } = await signOut();
       if (error) throw error;
@@ -149,11 +125,7 @@ const Members = () => {
           Members <span className="gradient-text">Community</span>
         </h1>
         
-        {supabaseError && (
-          <AuthError message="Supabase environment variables are not properly configured. Please make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment." />
-        )}
-        
-        {!supabaseError && !user ? (
+        {!user ? (
           <AuthForms
             email={email}
             setEmail={setEmail}
@@ -163,9 +135,9 @@ const Members = () => {
             handleSignUp={handleSignUp}
             loading={loading}
           />
-        ) : !supabaseError && user ? (
+        ) : (
           <MemberContent handleSignOut={handleSignOut} />
-        ) : null}
+        )}
       </main>
       
       <Footer />
